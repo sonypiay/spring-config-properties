@@ -15,6 +15,9 @@ public class ValueTest {
     @Autowired
     private TestApplication.ApplicationProperties applicationProperties;
 
+    @Autowired
+    private TestApplication.SystemProperties sys;
+
     @Test
     void testValue() {
         final String name = applicationProperties.getName();
@@ -24,6 +27,11 @@ public class ValueTest {
         Assertions.assertEquals("Belajar Spring Boot", name);
         Assertions.assertEquals(1, version);
         Assertions.assertFalse(productionMode);
+    }
+
+    @Test
+    void testSystemProperties() {
+        Assertions.assertNotNull(sys.getJavaHome());
     }
 
     @SpringBootApplication
@@ -41,6 +49,14 @@ public class ValueTest {
 
             @Value("${application.production-mode}")
             private boolean productionMode;
+        }
+
+        @Component
+        @Getter
+        public static class SystemProperties {
+
+            @Value("${JAVA_HOME}")
+            private String javaHome;
         }
     }
 }
